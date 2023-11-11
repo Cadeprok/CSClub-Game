@@ -1,10 +1,58 @@
-
-/* PLAYER 1 = X ||| PLAYER 2 = O */
 import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
         int count = 1;
+        String[] Board = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        while (count <= 9) {
+            if (count >= 5) {
+                if (win(Board)) {
+                    break;
+                }
+            }
+            System.out.println(
+                    "Enter your number (Ex. '1') to select the small board you would like to play in. Please only enter 1 through 9, including both 1 and 9!");
+
+            Scanner inputNum = new Scanner(System.in);
+            System.out.println("Player " + getPlayer(count) + " please enter your move (1-9)");
+            System.out.println();
+            System.out.println(printBoard(Board));
+            String UM = inputNum.nextLine();
+            int userMove = Integer.parseInt(UM); // userMove is small board that is being played in.
+            if ((userMove < 1) || (userMove > 9)) {
+                System.out.println("Please enter a valid board to play in!");
+            } else if ((Board[userMove - 1] == "P1W") || (Board[userMove - 1] == "P2W")) {
+                System.out.println("Please enter a board that has not been played in yet.");
+            } else {
+                int playerWhoWon = runSmallGame(count);
+                if (playerWhoWon == 1) {
+                    Board[userMove - 1] = "PW1";
+                    count++;
+                } else if (playerWhoWon == 2) {
+                    Board[userMove - 1] = "PW2";
+                    count += 1;
+                } else {
+                    System.out.println("Nobody won the round!");
+                    count--;
+                }
+
+            }
+
+        }
+        if (win(Board)) {
+            int UM = count - 1;
+            System.out.println(
+                    "Congratulations player " + getPlayer(count) + "on winning the game!");
+            System.out.println(printBoard(Board));
+            // return getPlayer(count - 1);
+        } else {
+            System.out.println("No one won the game!");
+            // return 0;
+        }
+    }
+
+    public static int runSmallGame(int count) {
+        // int count = 1;
         String[] Board = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
         System.out.println(
                 "Enter your number (Ex. '1') to select which space you would like to obtain. Please only enter 1 through 9, including both 1 and 9!");
@@ -35,11 +83,12 @@ public class App {
         if (win(Board)) {
             int temp = count - 1;
             System.out.println(
-                    "Congratulations player " + getPlayer(count - 1) + " on winning the game in " + temp + " turns!");
+                    "Congratulations player " + getPlayer(count - 1) + " on winning the match in " + temp + " turns!");
             System.out.println(printBoard(Board));
+            return getPlayer(count - 1);
         } else {
             System.out.println("No one won this round!");
-
+            return 0;
         }
     }
 
